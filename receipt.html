@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shipment Receipt</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ===== GLOBAL STYLES ===== */
+* {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #0d2746 0%, #5b0f3a 50%, #d90429 100%);
+  padding: 20px;
+  margin: 0;
+  min-height: 100vh;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* ===== RECEIPT CONTAINER ===== */
+.receipt {
+  max-width: 900px;
+  margin: auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: clamp(20px, 5vw, 36px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  border-top: 4px solid #d90429;
+}
+
+.receipt:hover {
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== HEADER SECTION ===== */
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.header h1 {
+  font-size: clamp(24px, 5vw, 36px);
+  letter-spacing: 1px;
+  color: #0d2746;
+  margin: 0;
+  font-weight: 700;
+}
+
+.live-tracking {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #d90429, #ff0000);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: clamp(12px, 2vw, 14px);
+  font-weight: 600;
+  margin-top: 12px;
+  box-shadow: 0 4px 12px rgba(217, 4, 41, 0.25);
+}
+
+.live-tracking:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(217, 4, 41, 0.35);
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===== CREATED TIMESTAMP ===== */
+.created {
+  text-align: right;
+  font-size: clamp(12px, 2vw, 14px);
+  color: #666;
+  margin: 0 0 20px;
+  font-weight: 500;
+}
+
+/* ===== INFO BOXES ROW ===== */
+.row {
+  display: flex;
+  gap: 20px;
+  margin: 24px 0;
+  flex-wrap: wrap;
+}
+
+.info-box {
+  flex: 1;
+  background: linear-gradient(135deg, #eef2f6 0%, #f8fafc 100%);
+  padding: 18px;
+  border-radius: 10px;
+  border-left: 4px solid #d90429;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  min-width: 200px;
+}
+
+.info-box:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.info-box strong {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 700;
+  color: #0d2746;
+  font-size: clamp(14px, 2vw, 16px);
+}
+
+.info-box div {
+  font-size: clamp(13px, 1.8vw, 15px);
+  line-height: 1.6;
+  margin-bottom: 6px;
+}
+
+/* ===== SECTION TITLE ===== */
+.section-title {
+  background: linear-gradient(135deg, #0d2746, #1a3a5c);
+  color: white;
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  margin: 28px 0 16px;
+  font-size: clamp(14px, 2vw, 16px);
+  box-shadow: 0 4px 12px rgba(13, 39, 70, 0.15);
+}
+
+/* ===== DESCRIPTION ===== */
+.description {
+  background: linear-gradient(135deg, #eef2f6 0%, #f8fafc 100%);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  border-left: 4px solid #d90429;
+  font-size: clamp(13px, 1.8vw, 15px);
+  line-height: 1.6;
+}
+
+/* ===== TABLE STYLES ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+tr {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+tr:hover {
+  background-color: #f9f9f9;
+}
+
+tr:last-child {
+  border-bottom: none;
+}
+
+td {
+  padding: 14px 16px;
+  font-size: clamp(13px, 1.8vw, 15px);
+}
+
+td:first-child {
+  background: linear-gradient(135deg, #f2f2f2 0%, #fafafa 100%);
+  font-weight: 700;
+  width: 35%;
+  color: #0d2746;
+}
+
+/* ===== FOOTER TEXT ===== */
+.footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: clamp(12px, 1.8vw, 14px);
+  color: #666;
+  line-height: 1.6;
+}
+
+/* ===== PACKAGE IMAGE SECTION ===== */
+.package-image {
+  text-align: center;
+  margin: 32px 0;
+  padding: 20px;
+  background: linear-gradient(135deg, #f9f9f9 0%, #fafafa 100%);
+  border-radius: 12px;
+}
+
+.package-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.package-image img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.package-image p {
+  font-size: clamp(12px, 1.8vw, 14px);
+  color: #666;
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+/* ===== DOWNLOAD BUTTON ===== */
+.download {
+  display: block;
+  margin: 28px auto 0;
+  background: linear-gradient(135deg, #0d2746, #d40000);
+  color: white;
+  padding: clamp(10px, 2vw, 14px) clamp(20px, 4vw, 32px);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: clamp(13px, 2vw, 15px);
+  box-shadow: 0 4px 16px rgba(13, 39, 70, 0.2);
+  letter-spacing: 0.5px;
+}
+
+.download:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(212, 0, 0, 0.35);
+  background: linear-gradient(135deg, #1a3a5c, #ff0000);
+}
+
+.download:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(13, 39, 70, 0.15);
+}
+
+/* ===== NAVIGATION LINKS ===== */
+.nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+a {
+  color: #0d2746;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: clamp(13px, 2vw, 15px);
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+a:hover {
+  background-color: rgba(13, 39, 70, 0.08);
+  color: #d90429;
+  transform: translateY(-1px);
+}
+
+/* ===== RESPONSIVE DESIGN - TABLET (768px) ===== */
+@media (max-width: 768px) {
+  body {
+    padding: 12px;
+  }
+
+  .receipt {
+    padding: clamp(16px, 4vw, 24px);
+    border-radius: 8px;
+  }
+
+  .header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+
+  .header h1 {
+    font-size: clamp(20px, 4vw, 28px);
+    letter-spacing: 0.5px;
+  }
+
+  .row {
+    flex-direction: column;
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .info-box {
+    min-width: unset;
+  }
+
+  .created {
+    text-align: left;
+    margin: 0 0 12px;
+  }
+
+  .section-title {
+    margin: 20px 0 12px;
+    font-size: clamp(13px, 2vw, 15px);
+  }
+
+  td {
+    padding: 10px 12px;
+  }
+
+  td:first-child {
+    width: 40%;
+  }
+
+  .package-image {
+    margin: 24px 0;
+    padding: 12px;
+  }
+
+  .download {
+    width: 90%;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  a {
+    display: block;
+    text-align: center;
+  }
+}
+
+/* ===== RESPONSIVE DESIGN - MOBILE (480px) ===== */
+@media (max-width: 480px) {
+  body {
+    padding: 8px;
+    background: linear-gradient(135deg, #0d2746 0%, #5b0f3a 50%, #d90429 100%);
+  }
+
+  .receipt {
+    padding: clamp(12px, 3vw, 16px);
+    border-radius: 6px;
+  }
+
+  .header {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+  }
+
+  .header h1 {
+    font-size: clamp(18px, 3vw, 24px);
+  }
+
+  .live-tracking {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .row {
+    gap: 12px;
+  }
+
+  .info-box {
+    padding: 12px;
+    border-left: 3px solid #d90429;
+  }
+
+  .info-box strong {
+    margin-bottom: 8px;
+    font-size: clamp(13px, 1.8vw, 14px);
+  }
+
+  .info-box div {
+    font-size: clamp(12px, 1.6vw, 13px);
+    margin-bottom: 4px;
+  }
+
+  .created {
+    font-size: clamp(11px, 1.6vw, 12px);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    padding: 10px 12px;
+    font-size: clamp(12px, 1.8vw, 13px);
+    margin: 16px 0 10px;
+  }
+
+  .description {
+    padding: 12px;
+    font-size: clamp(12px, 1.6vw, 13px);
+    margin-bottom: 16px;
+  }
+
+  table {
+    font-size: clamp(12px, 1.6vw, 13px);
+    margin-bottom: 16px;
+  }
+
+  td {
+    padding: 8px 10px;
+    font-size: clamp(11px, 1.6vw, 13px);
+  }
+
+  td:first-child {
+    width: 45%;
+    font-size: clamp(11px, 1.6vw, 12px);
+  }
+
+  .footer {
+    font-size: clamp(11px, 1.6vw, 12px);
+    margin-top: 16px;
+  }
+
+  .package-image {
+    margin: 16px 0;
+    padding: 8px;
+  }
+
+  .package-image img {
+    border-radius: 6px;
+  }
+
+  .package-image p {
+    font-size: clamp(11px, 1.6vw, 12px);
+    margin-top: 8px;
+  }
+
+  .download {
+    margin: 16px auto 0;
+    padding: clamp(8px, 1.5vw, 10px) clamp(16px, 3vw, 24px);
+    font-size: clamp(12px, 1.8vw, 13px);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .nav-links {
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  a {
+    padding: 6px 8px;
+    font-size: clamp(11px, 1.6vw, 12px);
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  body {
+    background: white;
+    padding: 0;
+    margin: 0;
+  }
+
+  .receipt {
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .download,
+  .nav-links {
+    display: none !important;
+  }
+
+  .footer {
+    display: none;
+  }
+
+  a {
+    text-decoration: none;
+    color: #333;
+  }
+}
+</style>
+</head>
+
+<body>
+  <div class="receipt">
+    <div class="header">
+      <h1>SHIPMENT RECEIPT</h1>
+      <div class="live-tracking"><div class="live-dot"></div> Live Tracking</div>
+    </div>
+
+    <div class="created" id="created-timestamp">Created Date: - | Created Time: -</div>
+
+    <div class="row">
+      <div class="info-box" aria-label="Sender details">
+        <strong>From:</strong>
+        <div id="from-name">-</div>
+        <div id="from-address">-</div>
+        <div id="from-zip">-</div>
+        <div id="from-country">-</div>
+        <div id="from-phone" style="color:red;"></div>
+        <div id="from-email" style="color:red;"></div>
+      </div>
+      <div class="info-box" aria-label="Receiver details">
+        <strong>To:</strong>
+        <div id="to-name">-</div>
+        <div id="to-address">-</div>
+        <div id="to-zip">-</div>
+        <div id="to-country">-</div>
+        <div id="to-phone" style="color:red;"></div>
+        <div id="to-email" style="color:red;"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Shipment Details</div>
+
+    <div class="description">Parcel Description: <i id="parcel-description">-</i></div>
+
+    <table>
+      <tr><td>Tracking Number</td><td id="row-tracking">-</td></tr>
+      <tr><td>Courier Status</td><td id="row-status">-</td></tr>
+      <tr><td>Dispatch Date</td><td id="row-dispatch">-</td></tr>
+      <tr><td>Estimated Delivery Date</td><td id="row-estimated">-</td></tr>
+      <tr><td>Declared Weight</td><td id="row-weight">-</td></tr>
+      <tr><td>Courier Fee</td><td id="row-fee">-</td></tr>
+      <tr><td>Current Location</td><td id="row-location">-</td></tr>
+    </table>
+
+    <div class="footer">If you have questions about this shipment please contact the courier with your tracking number.</div>
+
+    <div class="package-image">
+      <img id="package-img" src="images/package-photo.jpeg" alt="Package Photo" width="300" height="250">
+      <p id="package-id">Tracking ID: -</p>
+    </div>
+
+    <button class="download" id="print-btn">Download Receipt</button>
+    <div class="nav-links">
+      <a href="shipment.html">Back to shipment</a>
+      <a href="index.html">Home</a>
+    </div>
+  </div>
+
+  <script>
+    const store = sessionStorage.getItem('primegate-receipt');
+    const receipt = store ? JSON.parse(store) : null;
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = value || '-';
+      if (value === '' || value === null || value === undefined) {
+        el.style.display = 'none';
+      } else {
+        el.style.display = '';
+      }
+    }
+
+    function formatDate(date) {
+      return date.toISOString().split('T')[0];
+    }
+
+    function addDays(date, days) {
+      const copy = new Date(date);
+      copy.setDate(copy.getDate() + days);
+      return copy;
+    }
+
+    const today = new Date();
+    const formattedToday = formatDate(today);
+    const formattedEstimated = formatDate(addDays(today, 10));
+
+    if (!receipt) {
+      setText('from-name', 'Banoy hong');
+      setText('from-address', 'manama');
+      setText('from-zip', 'p.o. box 50490');
+      setText('from-country', 'Bahrain');
+      setText('from-phone', '+1 (505) 469-1539');
+      setText('from-email', 'Banoyhong5@gmail.com');
+
+      setText('to-name', 'Lina Sibayan');
+      setText('to-address', 'P.O.Box 1663 El Cerrito Ca.94530');
+      setText('to-zip', '94530');
+      setText('to-country', 'United States');
+      setText('to-phone', '+1 (415) 568-0543');
+      setText('to-email', 'lina8teen@gmail.com');
+
+      setText('parcel-description', 'BOX contains awards, medals, documents and cash');
+      setText('row-tracking', 'XY987654321NG');
+      setText('row-status', 'At customs');
+      setText('row-dispatch', formattedToday);
+      setText('row-estimated', formattedEstimated);
+      setText('row-weight', '37 kg');
+      setText('row-fee', '$4500');
+      setText('row-location', 'Istanbul international Airport');
+      setText('package-id', 'Tracking ID: XY987654321NG');
+      setText('created-timestamp', `Created Date: ${formattedToday} | Created Time: ${today.toLocaleTimeString()}`);
+    } else {
+      setText('from-name', receipt.sender?.name);
+      setText('from-address', receipt.sender?.address);
+      setText('from-zip', receipt.sender?.zip);
+      setText('from-country', receipt.sender?.country);
+      setText('from-phone', receipt.sender?.phone);
+      setText('from-email', receipt.sender?.email);
+
+      setText('to-name', receipt.receiver?.name);
+      setText('to-address', receipt.receiver?.address);
+      setText('to-zip', receipt.receiver?.zip);
+      setText('to-country', receipt.receiver?.country);
+      setText('to-phone', receipt.receiver?.phone);
+      setText('to-email', receipt.receiver?.email);
+
+      setText('parcel-description', receipt.content);
+      setText('row-tracking', receipt.trackingNumber);
+      setText('row-status', receipt.status);
+      setText('row-dispatch', receipt.dispatchDate || receipt.date || formattedToday);
+      setText('row-estimated', receipt.estimatedDelivery || formattedEstimated);
+      setText('row-weight', receipt.declaredWeight || '37 kg');
+      setText('row-fee', receipt.courierFee || '$4500');
+      setText('row-location', receipt.location);
+      setText('package-id', `Tracking ID: ${receipt.trackingNumber || '-'}`);
+      setText('created-timestamp', receipt.createdAt ? `Created Date: ${receipt.createdAt.split(' ')[0]} | Created Time: ${receipt.createdAt.split(' ')[1]}` : `${formattedToday} | ${today.toLocaleTimeString()}`);
+    }
+
+    document.getElementById('print-btn').addEventListener('click', () => window.print());
+  </script>
+</body>
+</html>

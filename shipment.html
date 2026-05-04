@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PrimeGate Logistics - Package Tracking</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Inter',sans-serif;
+}
+
+body{
+background:#f6f4f4;
+color:#222;
+line-height:1.6;
+}
+
+/* LOADER */
+.loader-overlay{
+  position:fixed;
+  inset:0;
+  display:grid;
+  place-items:center;
+  background: rgba(13,42,74,0.85);
+  z-index:1500;
+  opacity:1;
+  visibility:visible;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  backdrop-filter: blur(2px);
+}
+
+.loader-overlay.hide{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.loader{
+  width: 80px;
+  height: 80px;
+  border-radius:50%;
+  border:8px solid rgba(255,255,255,0.35);
+  border-top-color:#ff0000;
+  animation:spin 1.2s linear infinite;
+  box-shadow: 0 0 24px rgba(255, 0, 0, 0.3);
+}
+
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* CONTAINER */
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:40px 20px;
+}
+
+/* TRACKING HEADER */
+
+.init-label{
+text-align:center;
+letter-spacing:4px;
+color:#d40000;
+font-size:13px;
+margin-bottom:12px;
+text-transform:uppercase;
+font-weight:600;
+}
+
+.init-title{
+text-align:center;
+font-size:clamp(28px, 6vw, 42px);
+font-weight:700;
+margin-bottom:28px;
+line-height:1.2;
+}
+
+/* TRACK INPUT */
+
+.track-box{
+display:flex;
+gap:12px;
+justify-content:center;
+flex-wrap:wrap;
+margin-bottom:50px;
+}
+
+.track-box input{
+padding:14px 18px;
+border:2px solid #e0e0e0;
+border-radius:8px;
+font-size:15px;
+min-width:280px;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+background:#fff;
+}
+
+.track-box input:focus{
+outline:none;
+border-color:#d40000;
+box-shadow: 0 0 0 4px rgba(212, 0, 0, 0.1);
+}
+
+.track-box input::placeholder{
+color:#999;
+}
+
+.track-box button{
+padding:14px 28px;
+border:none;
+background:linear-gradient(135deg, #d40000, #ff0000);
+color:#fff;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+border-radius:8px;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+box-shadow: 0 4px 15px rgba(212, 0, 0, 0.25);
+min-width:140px;
+}
+
+.track-box button:hover{
+transform: translateY(-2px);
+box-shadow: 0 8px 24px rgba(212, 0, 0, 0.35);
+}
+
+.track-box button:active{
+transform: translateY(0);
+}
+
+.error-msg{
+color:#d32f2f;
+font-size:13px;
+text-align:center;
+font-weight:500;
+min-height:20px;
+}
+
+/* ANIMATION HELPERS */
+.fade-in-up{
+  opacity:0;
+  transform: translateY(15px);
+  animation: fadeInUp .8s ease forwards;
+}
+
+.fade-in-left{
+  opacity:0;
+  transform: translateX(-20px);
+  animation: fadeInLeft .8s ease forwards;
+}
+
+.fade-in-right{
+  opacity:0;
+  transform: translateX(20px);
+  animation: fadeInRight .8s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to { opacity:1; transform: translateY(0); }
+}
+
+@keyframes fadeInLeft {
+  to { opacity:1; transform: translateX(0); }
+}
+
+@keyframes fadeInRight {
+  to { opacity:1; transform: translateX(0); }
+}
+
+.card, .barcode-section, .map, .photo-card, table{
+  opacity:0;
+  transform: translateY(20px);
+  animation: cardAppear .8s ease forwards;
+}
+
+@keyframes cardAppear {
+  to { opacity:1; transform: translateY(0); }
+}
+
+@keyframes zoomIn {
+  to { opacity:1; transform: scale(1); }
+}
+
+.card:hover, .barcode-box:hover, .photo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+}
+
+/* BARCODE */
+
+.barcode-section{
+text-align:center;
+margin-bottom:40px;
+}
+
+.barcode-title{
+font-size:clamp(24px, 5vw, 36px);
+font-weight:700;
+color:#0d2746;
+margin-bottom:24px;
+}
+
+.barcode-box{
+display:flex;
+justify-content:center;
+align-items:center;
+background:#fff;
+padding:24px;
+border-radius:12px;
+box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+margin-bottom:16px;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+border: 1px solid #f0f0f0;
+}
+
+.barcode-box:hover{
+box-shadow: 0 8px 28px rgba(0,0,0,0.15);
+}
+
+.tracking-id{
+font-size:clamp(20px, 4vw, 28px);
+font-weight:700;
+letter-spacing:3px;
+margin-top:12px;
+color:#0d2746;
+word-break:break-all;
+}
+
+/* CARDS */
+
+.card{
+background:#fff;
+padding:28px;
+border-radius:12px;
+box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+margin-bottom:40px;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+border: 1px solid #f5f5f5;
+}
+
+.card:hover{
+box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+}
+
+.card h2{
+font-size:clamp(18px, 4vw, 26px);
+margin-bottom:16px;
+color:#0d2746;
+font-weight:700;
+}
+
+.card hr{
+border:none;
+border-top:2px solid #e0e0e0;
+margin-bottom:20px;
+}
+
+.red-header{
+color:#d40000;
+font-weight:700;
+}
+
+.info p{
+margin-bottom:14px;
+font-size:15px;
+line-height:1.6;
+}
+
+.info span{
+font-weight:600;
+color:#0d2746;
+}
+
+/* TABLE */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+.table-wrapper table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  margin-bottom: 0;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-bottom:40px;
+}
+
+th{
+padding:16px 18px;
+color:#fff;
+font-size:15px;
+text-align:center;
+background:linear-gradient(135deg,#0d2746,#d40000);
+font-weight:600;
+text-transform:uppercase;
+letter-spacing:0.5px;
+}
+
+td{
+padding:16px 18px;
+text-align:center;
+border-bottom:1px solid #f0f0f0;
+font-size:14px;
+}
+
+tr:hover{
+background-color:#f9f9f9;
+}
+
+tr:last-child td{
+border-bottom:none;
+}
+
+/* PROGRESS BAR */
+
+.progress{
+background:#e8e8e8;
+height:6px;
+border-radius:12px;
+margin-top:8px;
+position:relative;
+overflow:hidden;
+}
+
+.progress-bar{
+height:100%;
+width:0%;
+background:linear-gradient(90deg, #2a74d6, #1e56a0);
+border-radius:12px;
+animation:fillProgress 2s ease forwards;
+box-shadow: 0 0 8px rgba(42, 116, 214, 0.3);
+}
+
+@keyframes fillProgress {
+0% { width: 0%; }
+100% { width: 10%; }
+}
+
+.progress-label {
+font-weight:700;
+margin-top:8px;
+font-size:13px;
+color:#555;
+}
+
+/* RECEIPT BUTTON */
+
+.receipt-btn{
+display:block;
+width:240px;
+margin:40px auto;
+padding:14px 24px;
+border:none;
+color:#fff;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+border-radius:8px;
+background:linear-gradient(135deg, #0d2746, #d40000);
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+box-shadow: 0 4px 15px rgba(212, 0, 0, 0.25);
+}
+
+.receipt-btn:hover{
+transform: translateY(-2px);
+box-shadow: 0 8px 28px rgba(212, 0, 0, 0.35);
+}
+
+.receipt-btn:active{
+transform: translateY(0);
+}
+
+/* MAP */
+
+.map{
+margin-bottom:40px;
+border-radius:12px;
+overflow:hidden;
+box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.map:hover{
+box-shadow: 0 8px 28px rgba(0,0,0,0.15);
+}
+
+/* PACKAGE PHOTO */
+
+.photo-card{
+background:#fff;
+padding:clamp(24px, 4vw, 32px);
+border-radius:16px;
+box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+text-align:center;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+border: 1px solid #f0f0f0;
+position:relative;
+overflow:hidden;
+}
+
+.photo-card::before {
+content:'';
+position:absolute;
+top:0;
+left:0;
+right:0;
+height:4px;
+background:linear-gradient(90deg, #0d2746, #d40000);
+}
+
+.photo-card:hover{
+box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+transform: translateY(-4px);
+}
+
+.photo-card h2{
+font-size:clamp(24px, 5vw, 36px);
+color:#0d2746;
+margin-bottom:16px;
+font-weight:700;
+}
+
+.photo-card p{
+color:#666;
+margin-bottom:24px;
+font-size:clamp(14px, 2vw, 16px);
+font-weight:500;
+}
+
+.photo-container {
+position:relative;
+display:inline-block;
+border-radius:16px;
+overflow:hidden;
+box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+cursor:pointer;
+}
+
+.photo-container:hover {
+transform: scale(1.02);
+box-shadow: 0 12px 48px rgba(0,0,0,0.18);
+}
+
+.photo-card img{
+width:100%;
+max-width:500px;
+height:auto;
+display:block;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+border-radius:16px;
+object-fit:cover;
+}
+
+.photo-card img:hover{
+transform: scale(1.05);
+filter: brightness(1.05) contrast(1.02);
+}
+
+.image-overlay {
+position:absolute;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:linear-gradient(135deg, rgba(217,4,41,0.1), rgba(13,39,70,0.1));
+opacity:0;
+transition: opacity 0.3s ease;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:16px;
+}
+
+.photo-container:hover .image-overlay {
+opacity:1;
+}
+
+.image-overlay::before {
+content:'🔍';
+font-size:32px;
+color:white;
+text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.tap{
+margin-top:16px;
+font-size:clamp(12px, 1.5vw, 14px);
+color:#888;
+font-style:italic;
+opacity:0.8;
+}
+
+/* LIGHTBOX MODAL */
+.lightbox {
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+display:none;
+z-index:2000;
+cursor:pointer;
+backdrop-filter: blur(4px);
+}
+
+.lightbox.active {
+display:flex;
+align-items:center;
+justify-content:center;
+animation: fadeIn 0.3s ease;
+}
+
+.lightbox img {
+max-width:90%;
+max-height:90%;
+object-fit:contain;
+border-radius:8px;
+box-shadow: 0 0 60px rgba(0,0,0,0.5);
+animation: zoomIn 0.3s ease;
+}
+
+.lightbox-close {
+position:absolute;
+top:20px;
+right:20px;
+color:white;
+font-size:32px;
+cursor:pointer;
+z-index:2001;
+text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+transition: transform 0.2s ease;
+}
+
+.lightbox-close:hover {
+transform: scale(1.2);
+}
+
+@keyframes fadeIn {
+from { opacity:0; }
+to { opacity:1; }
+}
+
+@keyframes zoomIn {
+from { transform:scale(0.8); opacity:0; }
+to { transform:scale(1); opacity:1; }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 16px;
+  }
+
+  .init-title{
+    font-size:clamp(24px, 5vw, 32px);
+  }
+
+  .init-label{
+    font-size:12px;
+  }
+
+  .track-box {
+    flex-direction: column;
+    gap:10px;
+    margin-bottom:32px;
+  }
+
+  .track-box input {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .track-box button {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .barcode-section{
+    margin-bottom:32px;
+  }
+
+  .barcode-title{
+    font-size:clamp(20px, 4vw, 28px);
+  }
+
+  .barcode-box{
+    padding:18px;
+  }
+
+  .card{
+    padding:20px;
+    margin-bottom:24px;
+  }
+
+  .card h2{
+    font-size:clamp(16px, 4vw, 20px);
+    margin-bottom:12px;
+  }
+
+  .info p{
+    font-size:14px;
+    margin-bottom:10px;
+  }
+
+  .map{
+    margin-bottom:32px;
+  }
+
+  .map iframe{
+    height:300px;
+  }
+
+  .photo-card{
+    padding:20px;
+  }
+
+  .photo-card h2{
+    font-size:clamp(24px, 4vw, 32px);
+  }
+
+  .photo-container {
+    max-width: 100%;
+  }
+
+  .photo-card img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .lightbox img {
+    max-width: 95%;
+    max-height: 80%;
+  }
+
+  .receipt-btn {
+    width: 100%;
+    margin:32px auto;
+  }
+
+  .table-wrapper {
+    margin: 0 auto 32px;
+    overflow-x:auto;
+  }
+
+  table,
+  th,
+  td {
+    font-size: 13px;
+  }
+
+  th{
+    padding:12px 10px;
+  }
+
+  td{
+    padding:12px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px 12px;
+  }
+
+  .init-title{
+    font-size:22px;
+    margin-bottom:20px;
+  }
+
+  .track-box {
+    gap:8px;
+    margin-bottom:24px;
+  }
+
+  .track-box input,
+  .track-box button{
+    padding:12px 14px;
+    font-size:14px;
+  }
+
+  .card{
+    padding:16px;
+    margin-bottom:20px;
+  }
+
+  .barcode-box{
+    padding:14px;
+  }
+
+  th, td{
+    padding:10px 8px;
+    font-size:12px;
+  }
+
+  .receipt-btn {
+    padding:12px 20px;
+    font-size:14px;
+    width:100%;
+  }
+
+  .photo-card{
+    padding:16px;
+  }
+
+  .photo-card h2{
+    font-size:20px;
+    margin-bottom:12px;
+  }
+
+  .photo-card p{
+    font-size:13px;
+    margin-bottom:16px;
+  }
+
+  .photo-container {
+    max-width: 100%;
+  }
+
+  .photo-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+
+  .lightbox img {
+    max-width: 98%;
+    max-height: 70%;
+  }
+
+  .tap {
+    font-size: 11px;
+  }
+
+</style>
+</head>
+
+<body>
+
+<div class="loader-overlay" id="pageLoader" aria-live="polite" aria-label="Loading">
+  <div class="loader"></div>
+</div>
+
+<div class="container">
+
+<!-- TRACKING INPUT -->
+
+<p class="init-label">INITIALIZE TRACKING</p>
+<h1 class="init-title">Input your tracking number below.</h1>
+
+<div class="track-box">
+<input type="text" placeholder="Enter Tracking Number">
+<button>TRACK NOW</button>
+</div>
+
+
+<!-- BARCODE SECTION -->
+
+<div class="barcode-section fade-in-up" style="animation-delay: 0.2s;">
+
+<h2 class="barcode-title">Package Tracking Information</h2>
+
+<div class="barcode-box fade-in-scale" style="animation: zoomIn .8s ease forwards .2s; opacity:0; transform: scale(0.95);">
+<svg id="barcode"></svg>
+</div>
+
+<div class="tracking-id">XY987654321NG</div>
+
+</div>
+
+
+<!-- SENDER DETAILS -->
+
+<div class="card fade-in-left" style="animation-delay:0.3s;">
+
+<h2>Sender Details</h2>
+<hr>
+
+<div class="info">
+
+<p><span>Name:</span> <span id="sender-name">Banoy hong</span></p>
+<p><span>Phone:</span> <span id="sender-phone">+1 (505) 469-1539</span></p>
+<p><span>Email:</span> <span id="sender-email">Banoyhong5@gmail.com</span></p>
+<p><span>Address:</span> <span id="sender-address">manama</span></p>
+<p><span>Zip Code:</span> <span id="sender-zip">p.o. box 50490</span></p>
+<p><span>Country:</span> <span id="sender-country">Bahrain</span></p>
+
+</div>
+
+</div>
+
+
+<!-- RECEIVER DETAILS -->
+
+<div class="card fade-in-right" style="animation-delay:0.4s;">
+
+<h2 class="red-header">Receiver Details</h2>
+<hr style="border-top:2px solid red;">
+
+<div class="info">
+
+<p><span>Name:</span> <span id="receiver-name">Lina Sibayan</span></p>
+<p><span>Phone:</span> <span id="receiver-phone">+1 (415) 568-0543</span></p>
+<p><span>Email:</span> <span id="receiver-email">lina8teen@gmail.com</span></p>
+<p><span>Address:</span> <span id="receiver-address">P.O.Box 1663 El Cerrito Ca.94530</span></p>
+<p><span>Zip Code:</span> <span id="receiver-zip">94530</span></p>
+<p><span>Country:</span> <span id="receiver-country">United States</span></p>
+
+</div>
+
+</div>
+
+
+<!-- SHIPMENT TABLE -->
+
+<div class="table-wrapper fade-in-up" style="animation-delay:0.5s;">
+<table>
+
+<tr>
+<th>Tracking Number</th>
+<th>Status</th>
+<th>Location</th>
+<th>Progress</th>
+</tr>
+
+<tr>
+<td id="table-tracking">XY987654321NG</td>
+<td id="table-status" style="color:#d84315;">At customs</td>
+<td id="table-location">Bahrain</td>
+<td>
+<div class="progress-label" id="progress-text">10%</div>
+<div class="progress">
+<div class="progress-bar" id="progress-bar"></div>
+</div>
+</td>
+</tr>
+
+<tr>
+<th>Shipment Content</th>
+<th>Date</th>
+<th>Time</th>
+<th>Carrier</th>
+</tr>
+
+<tr>
+<td>BOX contains awards, medals, documents and cash</td>
+<td id="table-date"></td>
+<td id="table-time"></td>
+<td id="table-carrier">PrimeGate Logistics</td>
+</tr>
+
+</table>
+</div>
+
+
+<!-- VIEW RECEIPT -->
+
+<button class="receipt-btn" id="receipt-btn">View Receipt</button>
+
+
+<!-- GOOGLE MAP -->
+
+<div class="map fade-in-up" style="animation-delay:0.6s;">
+
+<iframe
+width="100%"
+height="400"
+style="border:0"
+loading="lazy"
+allowfullscreen
+src="https://maps.google.com/maps?q=Istanbul%20Airport&t=&z=13&ie=UTF8&iwloc=&output=embed">
+</iframe>
+
+</div>
+
+
+<!-- PACKAGE PHOTO -->
+
+<div class="photo-card fade-in-up" style="animation-delay:0.7s;">
+
+<h2>Package Photo</h2>
+
+<p>Tracking ID: XY987654321NG</p>
+
+<div class="photo-container" onclick="openLightbox()">
+<img src="images/package-photo.jpeg" alt="Package Photo" loading="lazy">
+<div class="image-overlay"></div>
+</div>
+
+<p class="tap">Click image to view full size</p>
+
+</div>
+
+<!-- LIGHTBOX MODAL -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+<span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+<img src="images/package-photo.jpeg" alt="Package Photo Full Size">
+</div>
+
+</div>
+
+
+<!-- BARCODE SCRIPT -->
+
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
+<script>
+
+JsBarcode("#barcode", "XY987654321NG", {
+format:"CODE128",
+lineColor:"#000",
+width:2,
+height:90,
+displayValue:false
+});
+
+const validTracking = 'XY987654321NG';
+const trackingIdEl = document.querySelector('.tracking-id');
+const input = document.querySelector('.track-box input');
+const button = document.querySelector('.track-box button');
+const tableTracking = document.getElementById('table-tracking');
+const statusEl = document.getElementById('table-status');
+const locationEl = document.getElementById('table-location');
+const tableDate = document.getElementById('table-date');
+const tableTime = document.getElementById('table-time');
+const carrierEl = document.getElementById('table-carrier');
+const progressText = document.getElementById('progress-text');
+const progressBar = document.getElementById('progress-bar');
+
+const LOCATION_START_KEY = 'primegate-location-start';
+let locationStart = localStorage.getItem(LOCATION_START_KEY);
+if (!locationStart) {
+  locationStart = new Date().toISOString();
+  localStorage.setItem(LOCATION_START_KEY, locationStart);
+}
+const locationStartDate = new Date(locationStart);
+
+function getCurrentLocation() {
+  const now = new Date();
+  const threeDaysMs = 3 * 24 * 60 * 60 * 1000;
+  return now.getTime() < locationStartDate.getTime() + threeDaysMs
+    ? 'Bahrain'
+    : 'Istanbul international Airport';
+}
+
+function updateLocation() {
+  if (locationEl) {
+    locationEl.textContent = getCurrentLocation();
+  }
+}
+
+function updateDateTime() {
+  const now = new Date();
+  const options = { year:'numeric', month:'short', day:'numeric' };
+  tableDate.textContent = now.toLocaleDateString('en-US', options);
+  tableTime.textContent = now.toLocaleTimeString('en-US');
+}
+
+const pageLoader = document.getElementById('pageLoader');
+function hideLoader() {
+  if (pageLoader) {
+    pageLoader.classList.add('hide');
+  }
+}
+
+updateDateTime();
+updateLocation();
+setInterval(() => {
+  updateDateTime();
+  updateLocation();
+}, 1000);
+
+window.addEventListener('load', () => {
+  setTimeout(hideLoader, 350);
+});
+
+button.addEventListener('click', () => {
+  const value = input.value.trim();
+  if (!value) {
+    alert('Please enter a tracking number.');
+    input.focus();
+    return;
+  }
+
+  if (value === validTracking) {
+    trackingIdEl.textContent = value;
+    tableTracking.textContent = value;
+    statusEl.textContent = 'In Transit';
+    statusEl.style.color = '#2e7d32';
+    updateLocation();
+    carrierEl.textContent = 'PrimeGate Logistics';
+    progressText.textContent = '10%';
+    progressBar.style.animation = 'none';
+    progressBar.offsetHeight;
+    progressBar.style.animation = 'fillProgress 2s ease forwards';
+
+    alert('Tracking successful: Package found.');
+  } else {
+    alert('Tracking number not found. Please verify your code.');
+  }
+});
+
+const receiptBtn = document.getElementById('receipt-btn');
+if (receiptBtn) {
+  receiptBtn.addEventListener('click', () => {
+    const receiptData = {
+      trackingNumber: tableTracking.textContent,
+      status: statusEl.textContent,
+      location: locationEl.textContent,
+      date: tableDate.textContent,
+      time: tableTime.textContent,
+      carrier: carrierEl.textContent,
+      progress: progressText.textContent,
+      content: 'BOX contains awards, medals, documents and cash',
+      sender: {
+        name: document.getElementById('sender-name')?.textContent || 'Banoy hong',
+        phone: document.getElementById('sender-phone')?.textContent || '+1 (505) 469-1539',
+        email: document.getElementById('sender-email')?.textContent || 'Banoyhong5@gmail.com',
+        address: document.getElementById('sender-address')?.textContent || 'manama',
+        zip: document.getElementById('sender-zip')?.textContent || 'p.o. box 50490',
+        country: document.getElementById('sender-country')?.textContent || 'Bahrain'
+      },
+      receiver: {
+        name: document.getElementById('receiver-name')?.textContent || 'Lina Sibayan',
+        phone: document.getElementById('receiver-phone')?.textContent || '+1 (415) 568-0543',
+        email: document.getElementById('receiver-email')?.textContent || 'lina8teen@gmail.com',
+        address: document.getElementById('receiver-address')?.textContent || 'P.O.Box 1663 El Cerrito Ca.94530',
+        zip: document.getElementById('receiver-zip')?.textContent || '94530',
+        country: document.getElementById('receiver-country')?.textContent || 'United States'
+      }
+    };
+    sessionStorage.setItem('primegate-receipt', JSON.stringify(receiptData));
+
+    window.location.href = 'receipt.html';
+  });
+}
+
+// Animate sections by adding visible state after a short delay
+window.addEventListener('DOMContentLoaded', () => {
+  const animateItems = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .card, .map, .photo-card');
+  animateItems.forEach((item, idx) => {
+    item.style.animationDelay = `${0.1 + idx * 0.08}s`;
+  });
+});
+
+// LIGHTBOX FUNCTIONS
+function openLightbox() {
+  const lightbox = document.getElementById('lightbox');
+  lightbox.classList.add('active');
+  document.body.style.overflow = 'hidden'; // Prevent scrolling
+}
+
+function closeLightbox() {
+  const lightbox = document.getElementById('lightbox');
+  lightbox.classList.remove('active');
+  document.body.style.overflow = 'auto'; // Restore scrolling
+}
+
+// Close lightbox on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeLightbox();
+  }
+});
+
+</script>
+
+</body>
+</html>

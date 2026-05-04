@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="PrimeGate Logistics - Fast, secure, and reliable global logistics services. Track shipments in real-time across 97+ countries with 99% on-time delivery rate.">
+<meta name="keywords" content="logistics, shipping, freight, tracking, global delivery, air freight, ocean freight">
+<meta name="author" content="PrimeGate Logistics">
+<meta name="theme-color" content="#d90429">
+<meta name="color-scheme" content="light">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- Open Graph / Social Media -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://primegate-logistics.com/">
+<meta property="og:title" content="PrimeGate Logistics - Global Shipping Solutions">
+<meta property="og:description" content="Fast, secure, and reliable global logistics services with real-time tracking.">
+<meta property="og:image" content="https://primegate-logistics.com/og-image.png">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://primegate-logistics.com/">
+<meta property="twitter:title" content="PrimeGate Logistics - Global Shipping Solutions">
+<meta property="twitter:description" content="Fast, secure, and reliable global logistics services with real-time tracking.">
+
+<link rel="canonical" href="https://primegate-logistics.com/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23d90429'>✈</text></svg>">
+
+<title>PrimeGate Logistics - Fast & Secure Global Shipping</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" as="style">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../footer/styles.css">
+
+<!-- Schema.org Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "PrimeGate Logistics",
+  "url": "https://primegate-logistics.com",
+  "logo": "https://primegate-logistics.com/logo.png",
+  "description": "Global logistics and shipping company",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "77 Fourth Avenue Street",
+    "addressLocality": "California",
+    "addressCountry": "US"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Service",
+    "telephone": "+1-651-212-7980",
+    "email": "support@primegate.com"
+  },
+  "sameAs": [
+    "https://www.facebook.com/primegate",
+    "https://twitter.com/primegate",
+    "https://www.linkedin.com/company/primegate"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "PrimeGate Logistics",
+  "image": "https://primegate-logistics.com/logo.png",
+  "description": "Professional logistics and shipping services",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "77 Fourth Avenue Street",
+    "addressLocality": "California",
+    "addressCountry": "US"
+  },
+  "telephone": "+1-651-212-7980",
+  "priceRange": "$$"
+}
+</script>
+
+</head>
+
+<body>
+<!-- Skip to main content link for accessibility -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ================= PAGE LOADER ================= -->
+<div class="loader-overlay" id="pageLoader" aria-hidden="true" role="status" aria-live="polite">
+  <div class="loader" aria-label="Loading"></div>
+</div>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="logo">
+        <img src="images/logo.jpeg" alt="PrimeGate Logistics Logo" width="50" height="50">
+        <div class="brand-name">
+          <strong>PrimeGate</strong>
+          <span>Logistics</span>
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a href="#" class="active" aria-current="page">Home</a>
+        <a href="#about" aria-label="Go to About section">About</a>
+        <a href="#testimonials" aria-label="Go to Testimonials section">Testimonials</a>
+        <a href="#contact" aria-label="Go to Contact section">Contact</a>
+        <button class="track-btn" onclick="focusTracking()" aria-label="Open tracking shipment dialog">Track Shipment</button>
+    </div>
+
+    <button class="menu-icon" onclick="toggleMenu()" aria-label="Toggle mobile navigation menu" aria-expanded="false">☰</button>
+
+    <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+        <a href="#" aria-current="page">Home</a>
+        <a href="#about" aria-label="Go to About section">About</a>
+        <a href="#testimonials" aria-label="Go to Testimonials section">Testimonials</a>
+        <a href="#contact" aria-label="Go to Contact section">Contact</a>
+        <button class="track-btn" onclick="focusTracking()" aria-label="Open tracking shipment dialog">Track Shipment</button>
+    </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="main-content" role="region" aria-label="Hero section with tracking">
+    <div class="hero-content">
+        <h1>Your GateWay To Fast And Secure Global Logistics</h1>
+
+        <p>Track, Manage And Deliver Shipment Worldwide With Confidence</p>
+
+        <div class="track-box">
+            <input id="trackingInput" type="text" placeholder="Enter Tracking Number" aria-label="Tracking number input">
+            <button onclick="trackShipment()" aria-label="Submit tracking number">Track Shipment</button>
+        </div>
+
+        <p id="errorMsg" class="error-msg"></p>
+
+    <div class="stats">
+            <div class="stat">
+                <strong class="counter" data-target="23000" aria-label="23000 deliveries completed">0</strong>
+                <span>Delivery</span>
+            </div>
+            <div class="stat">
+                <strong class="counter" data-target="97" aria-label="97 countries served">0</strong>
+                <span>Countries</span>
+            </div>
+            <div class="stat">
+                <strong class="counter" data-target="99" aria-label="99 percent on-time delivery">0</strong>
+                <span>On-Time %</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= SERVICE HERO ================= -->
+<section class="service-hero" id="hero" role="region" aria-label="Service hero section">
+<div class="container">
+<h1 id="serviceTitle">Air Freight</h1>
+<span>Service</span>
+</div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section class="section light" id="services" role="region" aria-label="Services offered by PrimeGate">
+<div class="container">
+
+<div class="service-wrapper">
+
+<div class="sidebar-container">
+<div class="sidebar">
+<h3>What We Do</h3>
+
+<button class="active" onclick="switchService('air', this)">Air Freight</button>
+<button onclick="switchService('ocean', this)">Ocean Freight</button>
+<button onclick="switchService('land', this)">Land Freight</button>
+<button onclick="switchService('train', this)">Train Freight</button>
+<button onclick="switchService('warehouse', this)">Smart Warehouse</button>
+</div>
+
+<div class="contact-box">
+<h4>Contact Info</h4>
+<p>📍 77 Street Fourth Avenue</p>
+<p>📞 +16512127980</p>
+<p>📧 support@primegate.com</p>
+</div>
+</div>
+
+<div class="service-main" id="contentBox">
+
+<img id="serviceImage" src="images/service-air.jpeg" alt="Air Freight Service" width="400" height="250">
+
+<div class="badge" id="serviceBadge">Air Logistics</div>
+
+<div class="text-content">
+<h3 id="serviceHeading">Efficient Air Freight Solutions</h3>
+<p id="serviceText">
+We provide fast, secure and global delivery services tailored to your logistics needs.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+</section>
+
+<!-- ================= SERVICES CARDS ================= -->
+<section class="section">
+  <div class="container">
+
+    <div class="section-top">
+      <div>
+        <p class="tag">Our Services</p>
+        <h2>Flexible Logistics<br>Solutions for Every Need</h2>
+        <p class="section-description">Explore our comprehensive range of shipping and logistics services designed to move your cargo efficiently across the globe. From air freight to ocean shipping, we have the perfect solution for your business.</p>
+      </div>
+    </div>
+
+    <div class="carousel-wrapper">
+      <div class="cards slider">
+        <div class="card active slide scroll-animate-scale">
+          <img src="images/service-sea.jpeg" alt="Sea Freight" />
+          <div class="card-content">
+            <h3>Sea Freight</h3>
+            <p>Cost-effective global shipping</p>
+          </div>
+        </div>
+
+        <div class="card slide scroll-animate-scale">
+          <img src="images/service-road.jpeg" alt="Road Transport" />
+          <div class="card-content">
+            <h3>Road Transport</h3>
+            <p>Reliable inland transport</p>
+          </div>
+        </div>
+
+        <div class="card slide scroll-animate-scale">
+          <img src="images/service-delivery.jpeg" alt="Home Delivery" />
+          <div class="card-content">
+            <h3>Home Delivery</h3>
+            <p>Door-to-door delivery</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="carousel-btn prev" onclick="prevCard()">❮</button>
+      <button class="carousel-btn next" onclick="nextCard()">❯</button>
+
+      <div class="carousel-indicators">
+        <span class="indicator active" onclick="goToCard(0)"></span>
+        <span class="indicator" onclick="goToCard(1)"></span>
+        <span class="indicator" onclick="goToCard(2)"></span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section class="section light" id="about" role="region" aria-label="About PrimeGate Logistics">
+  <div class="container about">
+
+    <div class="about-left">
+      <p class="tag">About Us</p>
+      <h2>A Global Leader In<br>Contract Logistics</h2>
+
+      <div class="about-intro">
+        <p>
+          Founded with a mission to revolutionize global logistics, PrimeGate Logistics has been at the forefront of supply chain innovation for over 8 years. We connect businesses across 97 countries with seamless, reliable, and sustainable logistics solutions designed to accelerate growth.
+        </p>
+        <p>
+          Our commitment to excellence, cutting-edge technology, and customer-centric service has earned the trust of 20,000+ businesses worldwide. We don't just move packages—we move possibilities.
+        </p>
+      </div>
+
+      <div class="stats-box">
+        <div class="stats-item scroll-animate-scale">
+          <h3>8+</h3>
+          <span>Years of Excellence</span>
+        </div>
+        <div class="stats-item scroll-animate-scale">
+          <h3>20K+</h3>
+          <span>Trusted Clients</span>
+        </div>
+        <div class="stats-item scroll-animate-scale">
+          <h3>97</h3>
+          <span>Countries Served</span>
+        </div>
+      </div>
+
+      <div class="about-mission">
+        <div class="mission-item scroll-animate-right">
+          <h4>🎯 Our Mission</h4>
+          <p>To provide innovative, reliable, and sustainable logistics solutions that empower businesses to grow globally with confidence.</p>
+        </div>
+        <div class="mission-item scroll-animate-right">
+          <h4>🌟 Our Vision</h4>
+          <p>To be the most trusted logistics partner, known for exceptional service, technological excellence, and customer success.</p>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item scroll-animate-left">
+          <h4>🌍 Global Excellence</h4>
+          <p>Operating across 97 countries with a network of strategic partners, we deliver world-class supply chain solutions tailored to your unique business needs.</p>
+        </div>
+
+        <div class="timeline-item scroll-animate-left">
+          <h4>👥 People & Culture</h4>
+          <p>Our team of 5,000+ logistics professionals is dedicated to creating a safe, inclusive, and engaging work environment where innovation thrives.</p>
+        </div>
+
+        <div class="timeline-item scroll-animate-left">
+          <h4>⚡ Smart Technology</h4>
+          <p>Advanced AI-powered tracking, automated warehousing, and real-time analytics ensure efficient, transparent, and data-driven logistics operations.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= TESTIMONIALS ================= -->
+<section class="section light" id="testimonials">
+  <div class="container">
+    <div class="testimonials-header">
+      <p class="tag">Client Testimonials</p>
+      <h2>Trusted By Leading Companies</h2>
+    </div>
+
+    <div class="carousel-wrapper testimonials-carousel">
+      <div class="cards testimonials-slider">
+        <div class="testimonial-card active slide scroll-animate-scale">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            PrimeGate Logistics has completely changed how we track shipments. The real-time updates give us confidence at every stage of delivery.
+          </p>
+          <div class="testimonial-author">
+            <img src="images/testimonial-robert.jpeg" alt="Robert Lonk" width="50" height="50">
+            <div>
+              <h4>Robert Lonk</h4>
+              <span>Operations Manager</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card slide scroll-animate-scale">
+          <div class="testimonial-stars">★★★★☆</div>
+          <p class="testimonial-text">
+            Outstanding customer service and reliable shipping. They've helped us expand our business globally without any logistics headaches.
+          </p>
+          <div class="testimonial-author">
+            <img src="images/testimonial-sarah.jpeg" alt="Sarah Mitchell" width="50" height="50">
+            <div>
+              <h4>Sarah Mitchell</h4>
+              <span>Supply Chain Director</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card slide scroll-animate-scale">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            The most professional logistics partner we've worked with. Their on-time delivery rate is consistently 99%+ and their team is always responsive.
+          </p>
+          <div class="testimonial-author">
+            <img src="images/testimonial-james.jpeg" alt="James Chen" width="50" height="50">
+            <div>
+              <h4>James Chen</h4>
+              <span>CEO, Tech Imports Inc.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="carousel-btn prev testimonials-prev" onclick="prevTestimonial()">❮</button>
+      <button class="carousel-btn next testimonials-next" onclick="nextTestimonial()">❯</button>
+
+      <div class="carousel-indicators testimonials-indicators">
+        <div class="indicator active" onclick="goToTestimonial(0)"></div>
+        <div class="indicator" onclick="goToTestimonial(1)"></div>
+        <div class="indicator" onclick="goToTestimonial(2)"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TEAM ================= -->
+<section class="section" id="team" role="region" aria-label="PrimeGate professional team members">
+  <div class="container center">
+    <p class="tag">Our Team</p>
+    <h2>Our Professionals & Team Members</h2>
+
+    <div class="team">
+      <div class="member scroll-animate">
+        <img src="images/team-marvin.jpeg" alt="Marvel Kally" width="150" height="150">
+        <h4>Marvin Kally</h4>
+        <span>General Manager</span>
+      </div>
+
+      <div class="member scroll-animate">
+        <img src="images/team-ruth.jpeg" alt="Ruth Hook" width="150" height="150">
+        <h4>Ruth Hook</h4>
+        <span>Managing Director</span>
+      </div>
+
+      <div class="member scroll-animate">
+        <img src="images/team-victor.jpeg" alt="Victor Sihmo" width="150" height="150">
+        <h4>Victor Sihmo</h4>
+        <span>Delivery Head</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+
+  <!-- MAIN -->
+  <div class="footer-main container">
+
+    <div class="footer-col">
+      <h3 class="footer-logo">PrimeGate Logistics</h3>
+
+      <p>77 Fourth Avenue Street,<br>California, USA</p>
+      <p>+1 651 212 7980</p>
+      <p>support@primegate.com</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Our Services</h4>
+      <ul>
+        <li><a href="#services" onclick="switchService('air', document.querySelector('.sidebar button.active')); return false;">Air Freight</a></li>
+        <li><a href="#services" onclick="switchService('warehouse', document.querySelector('.sidebar button')); return false;">Smart Warehousing</a></li>
+        <li><a href="#services" onclick="switchService('train', document.querySelector('.sidebar button')); return false;">Train Freight</a></li>
+        <li><a href="#services" onclick="switchService('ocean', document.querySelector('.sidebar button')); return false;">Ocean Freight</a></li>
+        <li><a href="#services" onclick="switchService('land', document.querySelector('.sidebar button')); return false;">Land Freight</a></li>
+        <li><a href="#services" onclick="location.hash='#services'; return false;">Supply Chain Solutions</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li class="quick-link" data-link="About Us">About Us</li>
+        <li class="quick-link" data-link="FAQs">FAQs</li>
+        <li class="quick-link" data-link="Privacy Policy">Privacy Policy</li>
+        <li class="quick-link" data-link="Refund Policy">Refund Policy</li>
+        <li class="quick-link" data-link="Terms & Conditions">Terms & Conditions</li>
+        <li class="quick-link" data-link="Disclaimer">Disclaimer</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ABOUT -->
+  <div class="footer-about">
+    <div class="container about-flex">
+
+      <div class="about-text">
+        <h4>About PrimeGate Logistics</h4>
+        <p>
+          We deliver reliable, efficient, and professional logistics services worldwide with
+          a strong commitment to customer satisfaction.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM -->
+  <div class="footer-bottom">
+    © 2026 PrimeGate Logistics. All Rights Reserved
+  </div>
+
+</footer>
+
+<!-- QUICK LINKS MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose" aria-label="Close modal">×</button>
+    <h2 class="modal-header" id="modalHeader">About Us</h2>
+    <div class="modal-body" id="modalBody">
+      <p>Welcome to our comprehensive resource center. Here you'll find detailed information about our services, policies, and more information tailored to your needs.</p>
+    </div>
+  </div>
+</div>
+
+<script src="script.js" defer></script>
+
+<!-- Stylesheet for accessibility skip link -->
+<style>
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #d90429;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  z-index: 10000;
+}
+.skip-link:focus {
+  top: 0;
+}
+</style>
+
+</body>
+</html>
