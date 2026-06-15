@@ -81,6 +81,11 @@ function trackShipment(){
     setTimeout(() => {
       window.location.href = "shipment2.html";
     }, 500);
+  } else if(value === "EF765432109US"){
+    showLoader();
+    setTimeout(() => {
+      window.location.href = "shipment3.html";
+    }, 500);
   } else {
     errorMsg.textContent = "Invalid tracking number. Please check and try again.";
   }
